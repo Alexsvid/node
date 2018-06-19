@@ -6,8 +6,11 @@ var clients = new Set();
 var messages = [];
 
 var fs = require("fs");
-fs.readFile("server\\messages.txt", {flag:"a+"}, function(err, content) {
+fs.readFile("messages.txt", {flag:"a+"}, function(err, content) {
     content;
+    console.log(content.toString());
+    messages.push(content.toLocaleString());
+
 });
 
 server.on("connection", function(socket) {
@@ -18,6 +21,14 @@ server.on("connection", function(socket) {
 
     socket.on("message", function(message) {
         messages.push(message);
+
+        s ="";
+        for(var m of messages) {
+            s = m+ '\n' + s;
+        }
+        fs.writeFile("messages.txt",  s);
+
+
         for(var inter of clients) {
             inter.send(message);
         }
