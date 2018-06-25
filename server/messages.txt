@@ -1,3 +1,36 @@
+alex> bb
+alex> bye
+alex> hey
+alex> hello
+alex> hi
+a;ex> bb
+a;ex> bye
+a;ex> privet
+a;ex> hey
+a;ex> hello
+a;ex> hi
+alex> hey
+alex> hello
+alex> hi
+alex> hey
+alex> hello
+alex> hi
+ale> hii
+ale> hey
+ale> hellloo
+ale> hi
+al> hi
+al> hi
+aaa> bye
+aaa> bye
+aaa> hi
+> hi
+> hi
+alex> hi
+alex> hi
+alex> Hi
+alex> hi
+alex> test
 a> hi
 Вася> как дела
 Вася> как дела
@@ -21,6 +54,18 @@ a> 3
 a> 2
 a> 1
 ﻿
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

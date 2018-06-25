@@ -21,6 +21,7 @@ class Bot {
         console.log(m);
 
         //var replay = this.name + "> " + m.name + "! не говори мне --" + m.message +"--";
+        this.addPhrase(m.message);
         var replay = this.name + "> " + this.findReplay(m.message);
         return replay;
     }
@@ -43,15 +44,42 @@ class Bot {
 
     loadReplays(){
         var fs = require("fs");
-        fs.readFile("bot.txt", {flag:"r"}, function(err, content) {
+        var content = fs.readFileSync("bot.txt");
+        this.replays = JSON.parse(content.toString());
+    }
+
+    addPhrase(word){
+        console.log(">"+this.key+">>"+word);
+        if(this.key) {
+            for(var k of this.key.split(" ")){
+                if(this.replays[k]){
+                    this.replays[k].push(word);
+                }else{
+                    this.replays[k] = [word];    
+                }
+                console.log(">>"+k+">>"+this.replays[k]);
+            }
+        }
+        this.key = word;
+        this.saveReplays();
+    }
+}
+
+class ChatLog {
+    loadChat(){
+        var fs = require("fs");
+        fs.readFile("messages.txt", {flag:"a+"}, function(err, content) {
             console.log(content.toString());
-
-           // this.replays = JSON.parse(content.toString());
-            
-
-            //console.log(this.replays.toString());
-        });        
-        
+            messages.push(content.toLocaleString());
+        });
+    }
+    saveChat(){
+        var fs = require("fs");
+        var s ="";
+        for(var m of messages) {
+            s = m+ '\n' + s;
+        }
+        fs.writeFile("messages.txt",  s);
     }
 }
 
@@ -61,16 +89,14 @@ var server = new wss({port : 591});
 
 var clients = new Set();
 var messages = [];
+
+var log = new ChatLog();
+log.loadChat();
+
 var chatBot = new Bot("Ботик");
 chatBot.loadReplays();
 
-var fs = require("fs");
-fs.readFile("messages.txt", {flag:"a+"}, function(err, content) {
-    content;
-    console.log(content.toString());
-    messages.push(content.toLocaleString());
 
-});
 
 server.on("connection", function(socket) {
     clients.add(socket);
@@ -85,12 +111,7 @@ server.on("connection", function(socket) {
 
         messages.push(message);
 
-        s ="";
-        for(var m of messages) {
-            s = m+ '\n' + s;
-        }
-        fs.writeFile("messages.txt",  s);
-
+        log.saveChat();
 
         for(var inter of clients) {
             inter.send(message);
